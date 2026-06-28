@@ -6,4 +6,4 @@ Em Java o compilador não gera um executável, ele gera um arquivo `*.class`*  e
 
 **Stack** → É a memória do método, ali ele guarda todas as variáveis locais e realiza as operações matemáticas e lógicas daquele método, sendo a chamada da pilha na memória para cada thread recursiva. Quando um método é chamado por outro método, a JVM criar um stack frame que é empilhado no topo da stack até resolver aquele conjunto de operações. Assim ele retorna o resultado daquele método e sai da pilha pelo padrão LIFO.
 
-**Metaspace** →
+**Metaspace** → Utiliza a memória nativa da máquina e não é gerenciado pela JVM ele guarda os metadados das classes que são responsáveis por dizer ao JVM as informações para processar um escopo. o ClassLoader é o responsável por entregar ao JVM os metadados da classe.
