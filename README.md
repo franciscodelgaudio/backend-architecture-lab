@@ -22,7 +22,7 @@ O papel dos fundamentos mudou — não acabou. Antes você estudava fundamentos 
 - Garbage collection: como funciona, quando é problema, como identificar
 - ClassLoader e ciclo de vida de classes
 - Threads e model de memória Java (JMM): visibilidade, ordering, volatile
-- Concorrência: synchronized, locks, CompletableFuture, virtual threads (Project Loom)
+- Concorrência: synchronized, locks
 - Profiling básico: heap dumps, thread dumps, JFR
 
 **Referência principal:** *Java Concurrency in Practice* (Goetz et al.) — ainda o melhor sobre concorrência em Java. Documentação do OpenJDK para JVM internals.
