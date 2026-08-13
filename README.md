@@ -1,450 +1,1522 @@
-# Guia de Estudos: Engenharia de Software e IA para Desenvolvedores Backend
+# Mapa de Conhecimentos — Backend Web / Engenharia de Software
+
+> Currículo permanente de estudos para desenvolver senioridade em sistemas backend web.
+>
+> **Objetivo:** dominar fundamentos de computação, backend, bancos de dados, sistemas distribuídos, arquitetura, segurança, infraestrutura, observabilidade, IA e engenharia de software.
+>
+> **Princípio:** não estudar apenas tecnologias. Buscar entender **conceitos, mecanismos, trade-offs e aplicações práticas**.
 
 ---
 
-## Premissa
+## Como usar este mapa
 
-Este guia não tem tempo como fator. O objetivo é ser uma referência que você consulta, revisita e aprofunda conforme vai acumulando experiência real. Leitura sem projeto concreto ao lado não entra de verdade — cada bloco deste guia tem mais valor quando você está sentindo a dor que ele resolve.
+Para cada tópico, buscar progressivamente:
 
-A progressão sugerida existe, mas não é linear. Você pode entrar por onde a dor aparecer primeiro.
+- **Fundamentos:** consigo explicar o conceito?
+- **Prática:** consigo implementar?
+- **Diagnóstico:** consigo investigar quando algo dá errado?
+- **Decisão:** consigo escolher entre alternativas e explicar os trade-offs?
 
----
+### Hierarquia de fontes
 
-## Parte 1 — Design de Código
-
-### Princípios Fundamentais
-
-Estes princípios existem para gerir uma coisa só: **complexidade**. Cada um é uma heurística, não uma lei. Entenda o motivo antes de aplicar.
-
-**SOLID**
-- Single Responsibility: uma classe tem um motivo pra mudar
-- Open/Closed: aberto para extensão, fechado para modificação
-- Liskov Substitution: subtipos devem ser substituíveis pelo tipo base sem quebrar o programa
-- Interface Segregation: interfaces pequenas e específicas
-- Dependency Inversion: dependa de abstrações, não de implementações concretas
-
-**Outros princípios essenciais**
-- DRY (Don't Repeat Yourself) — e quando repetição deliberada é melhor que abstração prematura
-- YAGNI (You Aren't Gonna Need It) — não construa o que não existe como necessidade hoje
-- KISS (Keep It Simple, Stupid) — complexidade é o inimigo padrão
-- Lei de Deméter — um objeto só fala com seus vizinhos diretos
-- Composição sobre herança — herança cria acoplamento profundo
-
-### Gestão de Complexidade
-
-O conceito central aqui é o de **módulo profundo** (deep module): um módulo ideal tem interface pequena e implementação grande. A complexidade fica escondida atrás de uma abstração simples. O oposto — módulo raso — expõe complexidade sem entregar valor equivalente.
-
-Conceitos do *A Philosophy of Software Design*:
-- Complexidade acidental vs. complexidade essencial
-- Módulos profundos vs. módulos rasos
-- Complexidade que vaza (information leakage)
-- Abstrações que mentem
-- Comentários que explicam o "porquê", não o "o quê"
-
-**Referência principal:** *A Philosophy of Software Design* (Ousterhout) — o livro mais denso e honesto sobre design de código que existe. Leitura obrigatória.
-
-### Design Patterns
-
-Não decorar o catálogo — entender os problemas que cada família resolve.
-
-**Criacionais:** como instanciar objetos sem acoplar ao tipo concreto (Factory, Builder, Singleton — e por que Singleton é problema)
-
-**Estruturais:** como compor objetos e classes (Adapter, Decorator, Proxy, Facade, Composite)
-
-**Comportamentais:** como objetos colaboram e distribuem responsabilidade (Strategy, Observer, Command, Template Method, Chain of Responsibility)
-
-O ponto real: patterns são vocabulário. Quando você fala "isso é um Strategy", o time inteiro entende a estrutura sem precisar de mais explicação.
-
-**Referência principal:** *Design Patterns* (GoF — Gang of Four) — referência canônica, linguagem densa. *Head First Design Patterns* — mais acessível para começar. *Refactoring to Patterns* (Kerievsky) — mostra como patterns emergem de refactoring, não de design upfront.
-
-### Refactoring
-
-- Code smells: o que eles são, o que indicam (não são problemas — são sintomas)
-- Técnicas de refactoring: extract method, extract class, move method, replace conditional with polymorphism
-- Refactoring seguro: apoiado em testes, em passos pequenos
-- Quando refatorar vs. quando reescrever
-
-**Referência principal:** *Refactoring* (Fowler) — o livro. O catálogo em refactoring.com como referência rápida.
+1. **Livros-texto** — teoria e fundamentos.
+2. **Cursos universitários** — explicação estruturada e exercícios.
+3. **Documentação oficial** — tecnologias e APIs.
+4. **RFCs / padrões** — protocolos e especificações.
+5. **OWASP / NIST / fontes oficiais** — segurança.
+6. **Papers** — pesquisa e fundamentos de IA/sistemas.
+7. **Projetos e laboratórios** — validação prática.
 
 ---
 
-## Parte 2 — Modelagem de Domínio
+# 1. Fundamentos de Computação
 
-### Por que modelagem vem antes de arquitetura
+## 1.1 Algoritmos e complexidade
 
-Você não sabe que estrutura arquitetural proteger se não sabe o que é o domínio. Arquitetura existe a serviço do domínio — não ao contrário. Estudar estilos antes de saber modelar domínio é decorar respostas sem ter a pergunta.
+### Conteúdos
 
-### DDD Estratégico
+- Big O, Big Ω, Big Θ
+- Complexidade de tempo
+- Complexidade de espaço
+- Análise assintótica
+- Recursão
+- Iteração
+- Correção de algoritmos
+- Trade-offs entre tempo e memória
 
-Esta é a metade mais importante e menos estudada. Não requer framework, pattern tático, nem livro para começar — requer conversa com quem conhece o negócio.
+### Estruturas de dados
 
-**Conceitos centrais:**
+- Array
+- Linked List
+- Stack
+- Queue
+- Hash Table
+- Set
+- Tree
+- Binary Search Tree
+- Heap
+- Priority Queue
+- Trie
+- Graph
 
-*Linguagem Ubíqua (Ubiquitous Language)*
-A linguagem do negócio usada literalmente no código. Não "User" quando o cliente chama de "Paciente". Não "process()" quando a operação tem um nome preciso no domínio. A linguagem ubíqua é o elo entre desenvolvedor e especialista de domínio — quando os dois usam as mesmas palavras para as mesmas coisas, os bugs semânticos somem.
+### Algoritmos
 
-*Bounded Context (Contexto Delimitado)*
-Um limite dentro do qual um modelo de domínio tem significado coerente. O mesmo conceito pode ter representações diferentes em contextos diferentes — "Cliente" no contexto de Vendas tem atributos distintos de "Cliente" no contexto de Suporte. Forçar um único modelo para tudo cria a "big ball of mud".
+- Binary Search
+- Sorting
+- Two Pointers
+- Sliding Window
+- Recursion
+- Backtracking
+- BFS
+- DFS
+- Greedy
+- Dynamic Programming
+- Shortest Path
+- Topological Sort
 
-*Context Map*
-O mapa das relações entre bounded contexts. Como eles se comunicam, quem lidera a integração, quais são os padrões de relacionamento (Partnership, Customer-Supplier, Conformist, Anti-Corruption Layer, Open Host Service, Published Language).
+### Referências principais
 
-*Subdomínios*
-- Core domain: onde o negócio se diferencia; aqui vai o esforço de modelagem mais rico
-- Supporting subdomain: necessário mas não diferenciador; pode ser construído com menos sofisticação
-- Generic subdomain: resolve problema genérico; comprar ou usar open source é melhor que construir
+- **MIT 6.006 — Introduction to Algorithms**
+- **Introduction to Algorithms — Cormen, Leiserson, Rivest & Stein (CLRS)**
 
-**Exercício concreto:** Para qualquer projeto real, escreva o glossário dos termos do cliente nas palavras *dele*, depois mapeie quais termos têm sentido diferente em contextos diferentes. Você está fazendo modelagem estratégica.
-
-**Event Storming**
-Técnica de workshop para descobrir o domínio colaborativamente com especialistas. Usa post-its de eventos de domínio (algo que aconteceu, passado), comandos (o que dispara o evento), e atores (quem dispara o comando). Não requer código. Produz um mapa do fluxo do negócio em horas.
-
-### DDD Tático
-
-*Atenção: aplique esses padrões quando sentir a dor que eles resolvem, não antes.*
-
-**Entidade:** objeto com identidade própria que persiste ao longo do tempo. Dois objetos com os mesmos atributos não são o mesmo se têm IDs diferentes.
-
-**Value Object:** objeto definido apenas por seus atributos, sem identidade própria. Imutável. "Dinheiro" é um value object — R$ 10,00 é sempre R$ 10,00, independente de qual instância.
-
-**Agregado:** cluster de entidades e value objects tratado como unidade de consistência. Toda mudança que precisa ser atômica mora dentro de um agregado. A raiz do agregado é a única entrada — nada de fora referencia entidades internas diretamente.
-
-**Repositório:** abstração que simula uma coleção em memória para recuperar e persistir agregados. O domínio não sabe que existe banco de dados.
-
-**Serviço de Domínio:** operação de domínio que não pertence naturalmente a nenhuma entidade ou value object. Não é service do Spring — é um conceito do domínio que envolve múltiplos objetos.
-
-**Evento de Domínio:** algo significativo que aconteceu no domínio, no passado. "PedidoConfirmado", "PagamentoRecusado". Usados para comunicação entre bounded contexts e para registrar histórico.
-
-**Factory:** responsabilidade de criar objetos complexos ou agregados, quando a criação envolve lógica de negócio.
-
-### Referências de Modelagem
-
-- *Learning Domain-Driven Design* (Vlad Khononov) — a melhor porta de entrada moderna. Cobre estratégico e tático com exemplos práticos e linguagem acessível
-- *Implementing Domain-Driven Design* (Vaughn Vernon) — referência funda para o DDD tático com exemplos completos
-- *Domain-Driven Design* (Eric Evans) — o original canônico. Linguagem densa, melhor como referência do que como introdução
-- *Domain Modeling Made Functional* (Scott Wlaschin) — perspectiva funcional que ilumina conceitos mesmo para quem não usa F#
+[MIT 6.006](https://ocw.mit.edu/courses/6-006-introduction-to-algorithms-fall-2011/)
 
 ---
 
-## Parte 3 — Arquitetura de Software
+# 2. Programação e Linguagens
 
-### O que arquitetura é (e o que não é)
+## 2.1 Fundamentos de programação
 
-Arquitetura são as decisões caras de reverter depois. Onde ficam as fronteiras entre componentes, quem depende de quem, o que fica junto e o que fica separado, como as partes conversam.
+- Abstração
+- Encapsulamento
+- Composição
+- Polimorfismo
+- Imutabilidade
+- Funções puras
+- Tratamento de erros
+- Generics
+- Interfaces
+- Tipagem estática/dinâmica
+- Runtime vs compile time
+- Memory management
+- Garbage Collection
 
-Arquitetura não é sobre qual framework usar. Framework é detalhe — a arquitetura é o que você *protege* do framework.
+## 2.2 TypeScript
 
-Toda decisão arquitetural é um trade-off. Quem promete "a melhor arquitetura" sem perguntar o contexto está vendendo moda.
+- Type system
+- Generics
+- Union/intersection types
+- Type narrowing
+- Type guards
+- Utility types
+- Conditional types
+- Mapped types
+- Modules
+- Decorators
+- Async/await
 
-### Qualidades de Software (as "-ilidades")
+### Referência
 
-A arquitetura não existe por elegância — existe para favorecer certas qualidades. Você escolhe uma estrutura porque ela serve as qualidades que o seu contexto exige, pagando o custo nas qualidades que você sacrifica.
+- **TypeScript Handbook**
 
-- **Manutenibilidade:** custo de entender e modificar o sistema ao longo do tempo
-- **Testabilidade:** facilidade de testar componentes isolados sem dependências concretas
-- **Escalabilidade:** capacidade de crescer sob carga (vertical e horizontal)
-- **Disponibilidade:** quanto tempo o sistema funciona; como ele se comporta sob falha
-- **Desempenho:** latência e throughput; onde estão os gargalos
-- **Observabilidade:** capacidade de entender o estado interno do sistema a partir de sua saída
-- **Segurança:** proteção contra acesso indevido e manipulação
-- **Implantabilidade:** facilidade e risco de colocar o sistema em produção
-- **Elasticidade:** capacidade de escalar e desescalar dinamicamente
-- **Interoperabilidade:** facilidade de integrar com outros sistemas
+https://www.typescriptlang.org/docs/handbook/intro.html
 
-Toda decisão arquitetural melhora algumas dessas qualidades e piora outras. Documentar esses trade-offs é parte do trabalho de quem toma as decisões.
+## 2.3 Node.js
 
-### Lei de Conway
+- Event Loop
+- libuv
+- Async I/O
+- Promises
+- Streams
+- Buffers
+- Workers
+- Processes
+- Signals
+- Graceful shutdown
+- Networking
+- Performance
 
-"As organizações que projetam sistemas são constrangidas a produzir sistemas que são cópias das estruturas de comunicação dessas organizações."
+### Referência
 
-Na prática: se dois times não conversam bem, o sistema deles vai ter uma fronteira mal definida naquele ponto. Antes de redesenhar a arquitetura, pergunte se você precisa redesenhar a comunicação do time.
+- **Node.js Documentation**
 
-### Arquitetura Interna
-
-**Layered (em Camadas)**
-Controller → Service → Repository. O default da maioria das aplicações Spring. Simples, conhecido por todos.
-Problema central: o domínio tende a vazar para a infraestrutura com o tempo. A lógica de negócio acaba espalhada em services anêmicos, e o banco de dados vira o modelo de domínio de fato.
-
-**Hexagonal (Ports & Adapters)**
-O domínio fica no centro e não conhece o mundo externo. O banco, a API REST, a fila, a UI viram "adaptadores" que implementam "portas" definidas pelo domínio. A regra de ouro é única: *as dependências apontam para dentro*. O domínio não importa nada de fora.
-
-Benefício principal: você testa a regra de negócio sem subir banco, sem servidor, sem nada de infraestrutura. Isso é arquitetura a serviço de testabilidade.
-
-Custo: mais cerimônia. Para um CRUD simples, é overkill. Vale quando o domínio é rico — quando as regras de negócio existem de verdade.
-
-**Clean Architecture e Onion Architecture**
-São essencialmente a mesma ideia que a hexagonal com nomes diferentes e algumas distinções de camada. O princípio central é o mesmo: dependências apontam para o centro (o domínio).
-
-**Referência:** *Clean Architecture* (Robert Martin) — ler com olhar crítico. Ele é dogmático. Parte do aprendizado é discordar com fundamentação depois de entender o porquê das regras.
-
-### Arquitetura de Sistema
-
-**Monólito**
-Uma aplicação única, um deploy só. Ainda é a escolha certa para a maioria dos projetos e para todos os projetos nascentes. O mercado redescobriu isso depois de anos de hype contrário. Não é arquitetura ruim — é a arquitetura mais simples que funciona para um determinado tamanho.
-
-**Monólito Modular**
-Um deploy único, mas internamente dividido em módulos com fronteiras bem definidas e acoplamento explicitamente controlado. Você ganha a clareza de fronteiras (e a capacidade de testar módulos isolados) sem o custo operacional de distribuir. É o consenso pragmático que emergiu depois da ressaca de microsserviços. Para a maioria dos projetos de pequenas empresas e startups, é o ponto de chegada ideal — não o ponto de partida para microsserviços.
-
-**Microsserviços**
-Serviços independentes, cada um com seu próprio deploy e (idealmente) seu próprio banco. Resolve um problema real: autonomia de times grandes, escala independente de componentes com cargas distintas.
-
-Custo real: rede (latência, falha de rede vira falha de negócio), observabilidade (você agora precisa rastrear uma requisição por N serviços), consistência distribuída (não existe transação global), complexidade de deploy. Adotar sem ter o problema que resolve é o erro mais caro da última década em arquitetura.
-
-Regra de bolso: comece monólito modular. Extraia um serviço quando sentir uma dor concreta e específica que justifique o custo — não antes.
-
-**Event-Driven Architecture**
-Componentes se comunicam por mensagens ou eventos em vez de chamadas diretas síncronas. Aparece combinada com os outros estilos. Brilha quando você precisa desacoplar no tempo (processar depois, reagir a algo que aconteceu), garantir resiliência (o produtor não precisa esperar o consumidor), ou integrar sistemas heterogêneos.
-
-Custo: rastrear o fluxo de execução fica mais difícil; consistência eventual exige lidar com estados intermediários; ordering e entrega garantida adicionam complexidade.
-
-### Referências de Arquitetura
-
-- *Fundamentals of Software Architecture* (Mark Richards & Neal Ford) — o melhor panorama do mercado. Catálogo de estilos, vocabulário de trade-offs, como pensar em decisões arquiteturais
-- *Get Your Hands Dirty on Clean Architecture* (Tom Hombergs) — implementa hexagonal em Java/Spring passo a passo. A ponte mais direta entre conceito e código real
-- *Software Architecture: The Hard Parts* (Ford, Richards, Sadalage, Dehghani) — para quando você estiver encarando decisões de sistema distribuído de verdade. Não antes
-- *Building Microservices* (Sam Newman) — a referência sobre microsserviços. Leia depois de ter sentido a dor que eles resolvem
+https://nodejs.org/docs/latest/api/
 
 ---
 
-## Parte 4 — Sistemas Distribuídos
+# 3. Sistemas Operacionais
 
-### Por que importa para backend
+## 3.1 Processos e threads
 
-Quando o seu sistema tem mais de um processo, ou usa banco de dados, ou usa fila, ou chama uma API externa — ele já é distribuído. Os problemas desta seção não são teóricos.
+- Process
+- Thread
+- Context switching
+- Multithreading
+- Concurrency
+- Parallelism
+- Race conditions
+- Deadlocks
+- Starvation
+- Synchronization
 
-### Conceitos Fundamentais
+## 3.2 Memória
 
-**Consistência, Disponibilidade, Tolerância a Partição (CAP)**
-O teorema CAP diz que um sistema distribuído pode garantir no máximo dois dos três ao mesmo tempo. Na prática, partições de rede acontecem — então a escolha real é entre consistência e disponibilidade quando a rede falha.
+- Stack
+- Heap
+- Virtual memory
+- Paging
+- Memory allocation
+- Memory leaks
+- Garbage Collection
 
-**Níveis de Consistência**
-- Strong consistency: toda leitura vê a escrita mais recente
-- Eventual consistency: as réplicas convergem, mas pode haver janela de divergência
-- Read-your-writes, monotonic reads, causal consistency — níveis intermediários com garantias específicas
+## 3.3 Linux
 
-**Replicação**
-Como os dados chegam em múltiplas máquinas. Síncrona (mais lenta, mais segura) vs. assíncrona (mais rápida, risco de perda). Leader-follower, multi-leader, leaderless.
+- Filesystem
+- Permissions
+- Users/groups
+- Processes
+- Signals
+- Services
+- systemd
+- Environment variables
+- Logs
+- Shell scripting
 
-**Particionamento (Sharding)**
-Como dividir dados entre nós. Por range, por hash, por diretório. Trade-offs de hotspots, rebalanceamento, queries cruzadas.
+## 3.4 Ferramentas
 
-### Padrões de Integração
+- ps
+- top
+- htop
+- free
+- df
+- du
+- lsof
+- ss
+- curl
+- grep
+- awk
+- sed
+- find
+- journalctl
+- systemctl
+- strace
 
-**Idempotência**
-Uma operação é idempotente se executá-la múltiplas vezes produz o mesmo resultado que executar uma vez. É o requisito mínimo para qualquer sistema que pode retentar operações. Se o seu endpoint de pagamento não é idempotente, você vai cobrar o cliente duas vezes quando a rede falhar no momento errado.
+### Referência principal
 
-**Outbox Pattern**
-Garantia de que um evento é publicado se e somente se a transação de banco for efetivada. Escreve o evento numa tabela "outbox" na mesma transação, e um processo separado publica para a fila. Resolve o problema clássico de "salvar no banco E publicar na fila" sem transação distribuída.
+- **Operating Systems: Three Easy Pieces — OSTEP**
 
-**Saga**
-Padrão para manter consistência em transações que cruzam múltiplos serviços sem transação global. Coreografada (cada serviço escuta eventos e age) ou orquestrada (um orchestrator central coordena os passos e as compensações em caso de falha).
+https://pages.cs.wisc.edu/~remzi/OSTEP/
 
-**Circuit Breaker**
-Interrompe chamadas a um serviço que está falhando, em vez de deixar a falha se propagar e consumir threads. Três estados: fechado (normal), aberto (rejeita chamadas), meio-aberto (testa recuperação).
+### Referência complementar
 
-**Bulkhead**
-Isola recursos por funcionalidade para que a falha de uma não esgote recursos das outras. Análogo às divisórias de um navio.
+- **Linux Kernel Documentation**
 
-### Mensageria e Filas
-
-- Diferença entre filas (ponto a ponto) e tópicos (pub/sub)
-- Garantias de entrega: at-most-once, at-least-once, exactly-once
-- Ordering: global, por partição, sem garantia
-- Consumer groups, offsets, replay
-- Dead letter queues
-
-**Referência principal:** *Designing Data-Intensive Applications* (Martin Kleppmann) — o livro. Cobre replicação, particionamento, transações, streams e consistência com profundidade e honestidade rara. Leitura de carreira, não de sprint.
-
----
-
-## Parte 5 — Qualidade e Testes
-
-### Testes como design
-
-Testes não são apenas verificação — são feedback de design. Código difícil de testar é código com problemas de design. A dificuldade de escrever o teste é o sinal; o design acoplado é o problema.
-
-**Pirâmide de Testes**
-- Unitários (base): testam uma unidade isolada, rápidos, muitos
-- Integração (meio): testam a interação entre componentes reais (ex: repositório com banco)
-- End-to-end (topo): testam o sistema completo, lentos, poucos
-
-A forma de pirâmide importa: muitos unitários baratos na base, poucos E2E caros no topo. Inversão da pirâmide (muitos E2E, poucos unitários) é sinal de problema de design — ninguém confia nos unitários porque o domínio está acoplado à infraestrutura.
-
-**Test-Driven Development (TDD)**
-Escrever o teste antes do código. O ciclo: Red (escreve teste que falha) → Green (escreve o mínimo para passar) → Refactor (melhora sem quebrar).
-
-O benefício real não é cobertura — é design. Quando você escreve o teste primeiro, você pensa na interface do código antes da implementação. Você descobre acoplamentos desnecessários antes de construí-los.
-
-**Testando o domínio isolado**
-Com arquitetura hexagonal, os testes de regra de negócio não precisam de Spring, banco, ou qualquer infraestrutura. São testes unitários puros, milissegundos de execução, zero dependência externa. Esse é o dividendo arquitetural mais concreto da hexagonal.
-
-**Testes de contrato**
-Verificam que um produtor (API) honra o contrato que seus consumidores esperam. Consumer-Driven Contract Testing com Pact é o padrão em microsserviços. Substitui (com vantagens) uma parte dos testes de integração end-to-end.
-
-**Referências de testes:**
-- *Test-Driven Development: By Example* (Kent Beck) — o fundador do TDD explica o método
-- *Unit Testing: Principles, Practices and Patterns* (Vladimir Khorikov) — o melhor livro moderno sobre testes unitários bem feitos
+https://docs.kernel.org/
 
 ---
 
-## Parte 6 — Estudar e Usar IA
+# 4. Redes de Computadores
 
-### Entender como LLMs funcionam
+## 4.1 Fundamentos
 
-Você não precisa implementar um transformer para usar bem a IA — mas precisa ter uma intuição de como ela funciona para entender seus limites.
+- OSI
+- TCP/IP
+- LAN/WAN
+- Routing
+- NAT
+- Firewall
+- Ports
+- Sockets
 
-**Conceitos fundamentais:**
+## 4.2 TCP/IP
 
-*Tokens*
-LLMs não processam palavras — processam tokens (fragmentos de texto, aproximadamente 3-4 caracteres em média para texto em inglês, menos eficiente para português). Isso importa porque o limite de contexto é em tokens, não em palavras, e porque o modelo "pensa" em unidades que não são as suas.
+- IPv4
+- IPv6
+- TCP
+- UDP
+- Handshake
+- Connection termination
+- Retransmission
+- Congestion control
 
-*Janela de contexto*
-Tudo que o modelo pode considerar ao gerar uma resposta. É finita. Em conversas longas, o início começa a sair da janela. Isso explica por que o modelo "esquece" instruções dadas no começo de uma conversa muito longa.
+## 4.3 DNS
 
-*Temperature e sampling*
-Temperature controla o quão "criativo" (ou randômico) o modelo é ao escolher o próximo token. Temperature 0 é quase determinístico; temperature alta produz variação maior. Para código, temperature baixa tende a ser melhor.
+- DNS resolution
+- A
+- AAAA
+- CNAME
+- MX
+- TXT
+- TTL
+- DNS caching
 
-*Por que o modelo alucina*
-O modelo não "sabe" coisas — ele prediz tokens plausíveis dado o contexto. Quando não tem base no treinamento, ele prediz tokens que *parecem* plausíveis mas são inventados. Isso não é bug — é a natureza do mecanismo. Você precisa verificar o que ele produz.
+## 4.4 HTTP
 
-*Por que o modelo é bom em código*
-Código é um dos formatos mais estruturados e abundantes nos dados de treinamento. Padrões se repetem. A IA interpola muito bem dentro de padrões conhecidos — e falha nos casos fora da distribuição (código que combina restrições incomuns, APIs obscuras, lógica de domínio específica).
+- HTTP/1.1
+- HTTP/2
+- HTTP/3
+- Methods
+- Status codes
+- Headers
+- Cookies
+- Sessions
+- Keep-alive
+- Compression
+- Content negotiation
+- Caching
 
-**Para ir mais fundo:**
-- Artigo "Attention Is All You Need" (Vaswani et al.) — o paper original do transformer
-- Série de vídeos *Neural Networks: Zero to Hero* (Andrej Karpathy) — constrói um GPT do zero com explicação detalhada
-- *Understanding Deep Learning* (Prince) — livro gratuito, cobre os fundamentos matematicamente acessíveis
+## 4.5 TLS
 
-### Prompt Engineering
+- HTTPS
+- Certificates
+- Certificate Authorities
+- Public/private keys
+- TLS handshake
+- Encryption
 
-Não é mágica — é especificação. As mesmas habilidades de escrever requisitos claros se transferem diretamente.
+## 4.6 Infraestrutura de rede
 
-**Princípios que funcionam:**
+- Reverse proxy
+- Load balancer
+- CDN
+- API Gateway
+- Service discovery
 
-*Seja específico sobre o contexto.* "Escreva um service em Java com Spring Boot que valida se um CPF é único, usando repositório JPA, lançando exceção de domínio customizada, sem lógica de negócio no controller" produz resultado muito melhor que "escreva um service Java que valida CPF".
+### Referência principal
 
-*Use exemplos positivos e negativos.* Mostrar o que você quer E o que você não quer elimina ambiguidade de forma eficiente.
+- **Computer Networking: A Top-Down Approach — Kurose & Ross**
 
-*Peça raciocínio antes da resposta.* "Pense passo a passo antes de responder" melhora resultados em perguntas que exigem raciocínio encadeado. O modelo produz tokens de raciocínio que influenciam os tokens da resposta.
+### Referências online
 
-*Estruture com XML ou delimitadores claros.* `<contexto>`, `<requisitos>`, `<restrições>` tornam a entrada mais parseável pelo modelo.
+- **MDN Web Docs — HTTP**
 
-*Especifique o formato da saída.* "Responda apenas com o código, sem explicação, sem markdown" elimina ruído quando você só quer o código.
+https://developer.mozilla.org/en-US/docs/Web/HTTP
 
-*System prompt vs. user prompt.* Em APIs, o system prompt define o papel e as restrições permanentes. O user prompt é o input. Separar as responsabilidades produz resultados mais consistentes.
+- **RFC Editor**
 
-**Técnicas avançadas:**
-
-- Chain-of-thought: pedir ao modelo para raciocinar em voz alta antes de concluir
-- Few-shot: dar exemplos de input/output antes da pergunta real
-- Role prompting: "Você é um arquiteto de software sênior revisando este código..."
-- Self-consistency: gerar múltiplas respostas e comparar (útil para decisões importantes)
-
-**Referência:** Documentação de prompt engineering da Anthropic em docs.claude.ai — direto da fonte, atualizado.
-
-### Padrões de Uso Responsável
-
-A diferença entre quem fica mais forte e quem fica dependente não está em *usar ou não* IA — está na *ordem* das operações.
-
-**Padrão: Decidir antes de delegar**
-Tome a decisão de design *antes* de abrir a IA. Qual é a estrutura? Quais são as fronteiras? Qual abordagem? *Depois* use a IA para implementar ou criticar o que você já decidiu. Inverter essa ordem (perguntar pra IA o que fazer antes de pensar) é o que atrofia o julgamento.
-
-**Padrão: Verificação crítica**
-Nunca aceite código gerado sem ler. Especificamente: verifique complexidade, verifique casos de borda, verifique o que o código *não* faz, verifique se a API usada realmente existe (LLMs alucinam APIs com frequência).
-
-**Padrão: Especificação iterativa**
-Comece com uma especificação escrita do que você quer construir — não em linguagem vaga, mas com os edge cases, as restrições, os contratos de entrada e saída. Use a IA para refinar a especificação antes de gerar código. Você aprende mais e produz melhor.
-
-**Padrão: Usar IA para revisar, não só para gerar**
-"Revise este código e aponte problemas de design, possíveis bugs, e o que não está coberto pelos testes" é um uso poderoso que muita gente ignora. A IA como par de revisão.
-
-**Padrão: Manter fundamentos ativos**
-Reserve tempo para resolver problemas sem IA — por hábito, não por punição. O objetivo não é não usar a ferramenta; é manter o músculo que te deixa capaz de julgá-la.
-
-### Ferramentas e Ecossistema
-
-**IDEs e assistentes de código**
-- Cursor — IDE baseado em VS Code com integração nativa de LLM; bom para trabalho de código com contexto de codebase
-- GitHub Copilot — integração em IDEs populares; mais inline completion
-- JetBrains AI — integração nativa no IntelliJ; útil se você já usa IntelliJ para Java
-
-**Linha de comando e agentes**
-- Claude Code — agente de linha de comando para tarefas de código que envolvem múltiplos arquivos, refactoring, geração de testes
-- Aider — alternativa open source para edição de código por chat no terminal
-
-**APIs e construção**
-- API da Anthropic (Claude), OpenAI (GPT), Google (Gemini) — bases para construir aplicações com LLM
-- LangChain / LangGraph — frameworks para orquestrar fluxos com LLMs; avalie se a abstração compensa antes de adotar
-- LlamaIndex — especializado em RAG (conectar LLMs a documentos e bases de conhecimento)
-
-### Construindo Aplicações com LLM
-
-Esta é a fronteira mais prática: usar LLMs como componente de uma aplicação real, não apenas como assistente de chat.
-
-**RAG (Retrieval-Augmented Generation)**
-Padrão para conectar LLMs a bases de conhecimento privadas. O fluxo: documento → chunking → embedding → vector store → na query, recuperar chunks relevantes → incluir no contexto → gerar resposta fundamentada.
-
-Conceitos que precisam ser entendidos:
-- Embeddings: representações vetoriais de texto que capturam similaridade semântica
-- Vector databases: Chroma, Pinecone, pgvector, Qdrant
-- Chunking strategies: como dividir documentos afeta muito a qualidade da recuperação
-- Reranking: um segundo passo para melhorar a relevância dos chunks recuperados
-
-**Padrões de agentes**
-- Tool use / function calling: o LLM pode chamar funções externas (buscar dados, executar código, chamar APIs)
-- ReAct (Reason + Act): o modelo raciocina, age, observa o resultado, repete
-- Multi-agent: múltiplos agentes com papéis distintos colaborando
-- Human-in-the-loop: o agente pausa e pede confirmação humana em pontos críticos
-
-**Aspectos de engenharia que importam:**
-- Latência: chamadas de LLM são lentas (~1-5s); design para isso desde o início
-- Custo por token: faz diferença em sistemas com volume; otimizar contexto não é prematuro
-- Streaming: resposta token a token melhora percepção de latência
-- Fallback e error handling: LLMs falham, retornam mal-formatado, ultrapassam limites
-- Observabilidade: logar inputs, outputs e tokens usados é mínimo para debugar
-- Testes de LLM: não são unitários convencionais; evals (avaliações com conjunto de casos) são o equivalente
-
-**Referências para construção com LLM:**
-- Documentação oficial da Anthropic (docs.anthropic.com) — cobre prompt engineering, tool use, e padrões de agentes
-- *AI Engineering* (Chip Huyen) — o livro mais completo sobre engenharia de sistemas com LLM
-- *Building LLMs for Production* (Louis-François Bouchard) — mais prático, cobre RAG, fine-tuning, avaliação
-- Curso *Deep Learning Specialization* (Andrew Ng, Coursera) — para quem quer entender a base matemática dos modelos
+https://www.rfc-editor.org/
 
 ---
 
-## Síntese: Como as partes se conectam
+# 5. Backend Web
 
-A modelagem de domínio define *o que* o sistema precisa representar.
-A arquitetura define *como* proteger essa representação da infraestrutura.
-O design de código define *como* organizar a implementação para que ela seja entendida e modificada.
-Os fundamentos definem o julgamento para avaliar se as três camadas acima estão corretas.
-A IA acelera a produção das três camadas — e exige que o julgamento das três camadas seja seu, não dela.
+## 5.1 APIs
 
-Estudar nessa ordem faz sentido porque cada camada responde a uma pergunta que a anterior levantou. Mas na prática, você vai entrar por onde a dor aparecer — e tudo bem. O guia existe para você saber onde estacionar o que aprendeu.
+- REST
+- RPC
+- GraphQL
+- WebSockets
+- Server-Sent Events
+- Webhooks
+
+## 5.2 REST
+
+- Resources
+- HTTP semantics
+- Idempotency
+- Pagination
+- Filtering
+- Sorting
+- Versioning
+- Error handling
+- Rate limiting
+- Backward compatibility
+- API documentation
+
+## 5.3 Autenticação
+
+- Sessions
+- Cookies
+- JWT
+- OAuth 2.0
+- OpenID Connect
+- Access tokens
+- Refresh tokens
+- API keys
+- MFA
+
+## 5.4 Backend frameworks
+
+Conhecer profundamente pelo menos um ecossistema:
+
+- Node.js / TypeScript
+- Java / Spring
+- Go
+- C#
+
+### Prioridade pessoal
+
+**TypeScript → Node.js → posteriormente Java/Spring ou Go**
 
 ---
 
-## Referências Consolidadas
+# 6. Bancos de Dados
 
-| Livro | Autor | Para quê |
-|---|---|---|
-| Fundamentals of Software Architecture | Richards & Ford | Panorama de estilos e trade-offs |
-| A Philosophy of Software Design | Ousterhout | Gestão de complexidade no código |
-| Get Your Hands Dirty on Clean Architecture | Hombergs | Hexagonal em Java/Spring, mãos na massa |
-| Learning Domain-Driven Design | Khononov | Melhor porta de entrada para DDD moderno |
-| Implementing Domain-Driven Design | Vernon | DDD tático com profundidade |
-| Domain-Driven Design | Evans | Referência canônica; consultar, não começar |
-| Clean Architecture | R. Martin | Ler com olhar crítico |
-| Software Architecture: The Hard Parts | Ford, Richards et al. | Decisões em sistemas distribuídos |
-| Building Microservices | Newman | Referência de microsserviços |
-| Designing Data-Intensive Applications | Kleppmann | Sistemas distribuídos, consistência, escala |
-| Refactoring | Fowler | Técnicas de refactoring e code smells |
-| Design Patterns | GoF | Catálogo de patterns; referência |
-| Java Concurrency in Practice | Goetz et al. | Concorrência em Java |
-| Test-Driven Development: By Example | Kent Beck | TDD na prática |
-| Unit Testing: Principles, Practices and Patterns | Khorikov | Testes unitários modernos |
-| AI Engineering | Chip Huyen | Engenharia de sistemas com LLM |
+## 6.1 Relacional
+
+### SQL
+
+- SELECT
+- JOIN
+- GROUP BY
+- HAVING
+- Subqueries
+- CTE
+- Window Functions
+- Views
+- Constraints
+
+### Modelagem
+
+- Entidades
+- Relacionamentos
+- Cardinalidade
+- Normalização
+- Desnormalização
+- Primary Keys
+- Foreign Keys
+- Constraints
+
+## 6.2 PostgreSQL
+
+- Indexes
+- B-tree
+- Composite indexes
+- Partial indexes
+- Query planner
+- EXPLAIN
+- EXPLAIN ANALYZE
+- VACUUM
+- WAL
+- Replication
+
+## 6.3 Transações
+
+- ACID
+- Atomicity
+- Consistency
+- Isolation
+- Durability
+- Isolation levels
+- Locks
+- Deadlocks
+- MVCC
+
+### Referência principal
+
+- **PostgreSQL Documentation**
+
+https://www.postgresql.org/docs/current/
+
+## 6.4 Internals
+
+- Storage engines
+- B-Trees
+- LSM Trees
+- Indexes
+- Transactions
+- WAL
+- Replication
+- Query processing
+
+### Referência principal
+
+- **Database Internals — Alex Petrov**
 
 ---
 
-*Este documento é um mapa, não um checklist. Cada item aprofunda os outros. O critério para avançar não é "terminei o livro" — é "senti a dor que isso resolve e agora entendo por quê".*
+# 7. Bancos Não Relacionais
+
+## MongoDB
+
+- Document modeling
+- Embedding
+- Referencing
+- Indexes
+- Aggregation
+- Transactions
+- Replication
+- Sharding
+
+## Outros modelos
+
+- Key-value
+- Document
+- Columnar
+- Graph
+
+### Objetivo
+
+Entender **quando escolher cada modelo**, não decorar tecnologias.
+
+---
+
+# 8. Caching
+
+- Cache hit/miss
+- TTL
+- Cache invalidation
+- Cache-aside
+- Write-through
+- Write-behind
+- Local cache
+- Distributed cache
+- Cache stampede
+- Cache consistency
+
+## Redis
+
+- Strings
+- Lists
+- Sets
+- Sorted Sets
+- Hashes
+- Pub/Sub
+- Streams
+- Transactions
+- Distributed locks
+
+---
+
+# 9. Mensageria e Sistemas Assíncronos
+
+## Conceitos
+
+- Message Queue
+- Producer
+- Consumer
+- Broker
+- Acknowledgement
+- Retry
+- Dead Letter Queue
+- Ordering
+- At-most-once
+- At-least-once
+- Exactly-once semantics
+- Idempotency
+
+## Tecnologias
+
+- RabbitMQ
+- Kafka
+
+## Arquiteturas
+
+- Event-driven architecture
+- Eventual consistency
+- Event sourcing
+- CQRS
+- Outbox Pattern
+- Saga
+
+---
+
+# 10. Concorrência e Sistemas Distribuídos
+
+## Concorrência
+
+- Race conditions
+- Mutex
+- Semaphore
+- Atomic operations
+- Optimistic locking
+- Pessimistic locking
+- Thread safety
+
+## Sistemas distribuídos
+
+- CAP theorem
+- Consistency
+- Availability
+- Partition tolerance
+- Replication
+- Sharding
+- Leader election
+- Consensus
+- Distributed locks
+- Distributed transactions
+- Eventual consistency
+- Clock synchronization
+
+## Falhas
+
+- Duplicate requests
+- Network failure
+- Partial failure
+- Retry storms
+- Split brain
+- Cascading failure
+
+### Referência principal
+
+- **Designing Data-Intensive Applications — Martin Kleppmann & Chris Riccomini**
+
+https://www.oreilly.com/library/view/designing-data-intensive-applications/9781098119058/
+
+---
+
+# 11. Engenharia de Software
+
+## Princípios
+
+- SOLID
+- DRY
+- KISS
+- YAGNI
+- Separation of Concerns
+- High cohesion
+- Low coupling
+- Composition over inheritance
+- Dependency inversion
+
+## Design Patterns
+
+- Factory
+- Builder
+- Strategy
+- Adapter
+- Decorator
+- Observer
+- Command
+- State
+- Repository
+
+### Referências principais
+
+- **Clean Code — Robert C. Martin**
+- **Refactoring — Martin Fowler**
+- **Patterns of Enterprise Application Architecture — Martin Fowler**
+- **Clean Architecture — Robert C. Martin**
+
+https://martinfowler.com/books/eaa.html
+
+---
+
+# 12. Domain-Driven Design
+
+## Strategic DDD
+
+- Domain
+- Subdomain
+- Core Domain
+- Supporting Subdomain
+- Generic Subdomain
+- Bounded Context
+- Context Map
+
+## Tactical DDD
+
+- Entity
+- Value Object
+- Aggregate
+- Aggregate Root
+- Repository
+- Domain Service
+- Application Service
+- Domain Event
+- Factory
+
+## Modelagem
+
+- Ubiquitous Language
+- Invariants
+- Business rules
+- Domain boundaries
+
+### Referências principais
+
+1. **Domain-Driven Design — Eric Evans**
+2. **Implementing Domain-Driven Design — Vaughn Vernon**
+3. **Domain-Driven Design Distilled — Vaughn Vernon**
+
+---
+
+# 13. Testes
+
+## Tipos
+
+- Unit tests
+- Integration tests
+- End-to-end tests
+- Contract tests
+- Load tests
+- Smoke tests
+
+## Conceitos
+
+- Test doubles
+- Mock
+- Stub
+- Fake
+- Spy
+- Fixtures
+- Test isolation
+- Testability
+- Test pyramid
+
+## Estratégia
+
+- O que testar?
+- Onde testar?
+- Como evitar testes frágeis?
+- Como testar integrações?
+- Como testar contratos?
+
+### Referências
+
+- **Test-Driven Development — Kent Beck**
+- **xUnit Test Patterns — Gerard Meszaros**
+
+---
+
+# 14. Segurança Web
+
+> Segurança deve ser estudada continuamente e integrada ao desenvolvimento, não tratada como etapa final.
+
+## 14.1 Fundamentos
+
+- CIA Triad
+- Authentication
+- Authorization
+- Least privilege
+- Defense in depth
+- Threat modeling
+- Attack surface
+
+## 14.2 Vulnerabilidades
+
+- Broken Access Control
+- Security Misconfiguration
+- Injection
+- SQL Injection
+- XSS
+- CSRF
+- SSRF
+- Path Traversal
+- Command Injection
+- File Upload vulnerabilities
+- Insecure Deserialization
+- Authentication failures
+
+## 14.3 OWASP
+
+- OWASP Top 10
+- OWASP Web Security Testing Guide
+- OWASP ASVS
+- OWASP Cheat Sheet Series
+
+### Referências principais
+
+- **OWASP Top 10**
+
+https://owasp.org/www-project-top-ten/
+
+- **OWASP Web Security Testing Guide**
+
+https://owasp.org/www-project-web-security-testing-guide/
+
+- **PortSwigger Web Security Academy**
+
+https://portswigger.net/web-security
+
+---
+
+# 15. Criptografia
+
+- Hash
+- Salt
+- Encryption
+- Symmetric encryption
+- Asymmetric encryption
+- Digital signatures
+- HMAC
+- Key exchange
+- Certificates
+- TLS
+- Randomness
+
+## Algoritmos/conceitos
+
+- SHA-2/SHA-3
+- AES
+- RSA
+- ECC
+- Argon2
+- bcrypt
+
+### Referências
+
+- **Serious Cryptography — Jean-Philippe Aumasson**
+- **Cryptography Engineering — Ferguson, Schneier & Kohno**
+
+---
+
+# 16. Segurança de Infraestrutura
+
+- Linux security
+- File permissions
+- SSH
+- Firewall
+- Network segmentation
+- Secrets management
+- Container security
+- IAM
+- Cloud security
+- Dependency vulnerabilities
+- Supply chain security
+
+## DevSecOps
+
+- SAST
+- DAST
+- Dependency scanning
+- Container scanning
+- Secret scanning
+- Security CI/CD
+
+---
+
+# 17. Performance
+
+## Backend
+
+- Profiling
+- CPU
+- Memory
+- Garbage Collection
+- Async operations
+- Connection pools
+- Thread pools
+
+## Banco
+
+- Slow queries
+- Indexes
+- Query plans
+- N+1
+- Locks
+- Connection pooling
+
+## Web
+
+- Latency
+- Throughput
+- Bandwidth
+- Compression
+- CDN
+- Caching
+
+## Load testing
+
+- k6
+- JMeter
+- autocannon
+
+---
+
+# 18. Observabilidade
+
+## Logs
+
+- Structured logging
+- Log levels
+- Correlation IDs
+- Request IDs
+
+## Metrics
+
+- Counters
+- Gauges
+- Histograms
+- Percentiles
+- p50
+- p95
+- p99
+
+## Tracing
+
+- Distributed tracing
+- Span
+- Trace
+- Context propagation
+
+## Ferramentas
+
+- OpenTelemetry
+- Prometheus
+- Grafana
+
+## SRE
+
+- SLI
+- SLO
+- SLA
+- Error budget
+- Incident response
+- Postmortems
+- Capacity planning
+
+### Referências principais
+
+- **Site Reliability Engineering — Google**
+- **The Site Reliability Workbook — Google**
+- **Building Secure & Reliable Systems — Google**
+
+https://sre.google/books/
+
+---
+
+# 19. DevOps e Infraestrutura
+
+## Linux
+
+- Processes
+- Networking
+- Filesystem
+- Permissions
+- Services
+- Monitoring
+
+## Docker
+
+- Images
+- Layers
+- Containers
+- Volumes
+- Networks
+- Docker Compose
+- Multi-stage builds
+- Container security
+
+### Referência
+
+https://docs.docker.com/
+
+## CI/CD
+
+- Build pipelines
+- Automated tests
+- Deployment
+- Rollback
+- Blue/green deployment
+- Canary deployment
+
+## Kubernetes
+
+- Pod
+- Deployment
+- Service
+- Ingress
+- ConfigMap
+- Secret
+- StatefulSet
+- Job
+- CronJob
+- Probes
+- HPA
+- Scheduling
+
+### Referência
+
+https://kubernetes.io/docs/
+
+## Cloud
+
+Escolher uma cloud principal e aprofundar.
+
+### Recomendação
+
+**AWS**
+
+Estudar:
+
+- EC2
+- S3
+- RDS
+- VPC
+- IAM
+- CloudFront
+- Load Balancer
+- Lambda
+- SQS
+- SNS
+- CloudWatch
+
+### Referência
+
+https://docs.aws.amazon.com/
+
+---
+
+# 20. Infrastructure as Code
+
+- Terraform
+- State
+- Modules
+- Variables
+- Providers
+- Resource dependencies
+- Secrets
+- Environment management
+
+### Referência
+
+https://developer.hashicorp.com/terraform/docs
+
+---
+
+# 21. System Design
+
+## Projetos para estudar
+
+- URL Shortener
+- Chat
+- E-commerce
+- Payment system
+- Notification system
+- File storage
+- Search system
+- Social network
+- Video streaming
+- Ride sharing
+
+## Processo de design
+
+1. Requirements
+2. Functional requirements
+3. Non-functional requirements
+4. Capacity planning
+5. Architecture
+6. Data model
+7. Communication
+8. Consistency
+9. Scaling
+10. Failure handling
+11. Security
+12. Observability
+13. Cost
+
+### Referências
+
+- **Designing Data-Intensive Applications**
+- **Designing Distributed Systems — Brendan Burns**
+- **System Design Interview — Alex Xu**
+
+---
+
+# 22. Inteligência Artificial — Fundamentos
+
+## 22.1 Conceitos gerais
+
+- Artificial Intelligence
+- Machine Learning
+- Deep Learning
+- Neural Networks
+- Supervised learning
+- Unsupervised learning
+- Reinforcement learning
+
+## 22.2 Matemática
+
+- Álgebra linear
+- Vetores
+- Matrizes
+- Probabilidade
+- Estatística
+- Derivadas
+- Gradiente
+
+### Referências
+
+- **Stanford CS229 — Machine Learning**
+- **Deep Learning — Goodfellow, Bengio & Courville**
+
+https://cs229.stanford.edu/
+
+https://www.deeplearningbook.org/
+
+---
+
+# 23. Neural Networks e Deep Learning
+
+- Neuron
+- Weights
+- Bias
+- Activation functions
+- Forward propagation
+- Backpropagation
+- Gradient descent
+- Loss functions
+- Optimization
+- Regularization
+- Overfitting
+- Underfitting
+- CNNs
+- RNNs
+- Transformers
+
+---
+
+# 24. Transformers e LLMs
+
+## Conceitos
+
+- Tokenization
+- Tokens
+- Embeddings
+- Attention
+- Self-attention
+- Multi-head attention
+- Positional encoding
+- Transformer blocks
+- Context window
+
+## Treinamento
+
+- Pre-training
+- Fine-tuning
+- Instruction tuning
+- RLHF
+- Preference optimization
+
+## Inferência
+
+- Temperature
+- Sampling
+- Context management
+- Latency
+- Token usage
+- Model selection
+
+## Limitações
+
+- Hallucination
+- Context limitations
+- Bias
+- Model uncertainty
+- Knowledge cutoff
+- Prompt injection
+
+### Referências
+
+- **Attention Is All You Need**
+
+https://arxiv.org/abs/1706.03762
+
+- **The Illustrated Transformer — Jay Alammar**
+
+https://jalammar.github.io/illustrated-transformer/
+
+---
+
+# 25. AI Engineering / LLM Applications
+
+## Prompting
+
+- Clear instructions
+- Context
+- Constraints
+- Few-shot
+- Zero-shot
+- Structured output
+- Examples
+- Evaluation
+
+## RAG
+
+- Embeddings
+- Vector databases
+- Chunking
+- Retrieval
+- Reranking
+- Semantic search
+- Grounding
+
+## Tool use
+
+- Function calling
+- Tool schemas
+- Agents
+- MCP
+- External APIs
+
+## Avaliação
+
+- Accuracy
+- Precision/recall
+- Groundedness
+- Hallucination rate
+- Evaluation datasets
+- Regression tests
+
+### Referências
+
+- **OpenAI Developer Documentation**
+
+https://platform.openai.com/docs/
+
+- **OpenAI Cookbook**
+
+https://cookbook.openai.com/
+
+---
+
+# 26. IA aplicada ao desenvolvimento de software
+
+## Usar IA para
+
+- Code generation
+- Refactoring
+- Debugging
+- Testing
+- Documentation
+- Migration
+- Code review
+- Architecture analysis
+- Requirements analysis
+- Security analysis
+- Learning
+
+## Fluxo recomendado
+
+```text
+Problem
+   ↓
+Context
+   ↓
+Instructions
+   ↓
+Constraints
+   ↓
+Tools
+   ↓
+AI output
+   ↓
+Verification
+   ↓
+Testing
+   ↓
+Human decision
+```
+
+## Competência essencial
+
+Não basta saber obter respostas da IA.
+
+É necessário saber:
+
+- verificar respostas;
+- detectar alucinações;
+- fornecer contexto suficiente;
+- identificar código incorreto;
+- questionar decisões arquiteturais;
+- validar segurança;
+- validar performance;
+- comparar alternativas.
+
+---
+
+# 27. Engenharia de Requisitos
+
+- Requirements gathering
+- Functional requirements
+- Non-functional requirements
+- Constraints
+- Acceptance criteria
+- User stories
+- Edge cases
+- Domain modeling
+- Stakeholder communication
+
+## Objetivo
+
+Transformar:
+
+> "Precisamos de um sistema para controlar obras."
+
+em:
+
+- requisitos;
+- regras de negócio;
+- entidades;
+- casos de uso;
+- restrições;
+- critérios de aceitação;
+- requisitos não funcionais.
+
+---
+
+# 28. Design de APIs
+
+- API contracts
+- OpenAPI
+- Versioning
+- Backward compatibility
+- Pagination
+- Idempotency
+- Error models
+- Rate limiting
+- Authentication
+- Authorization
+- Webhooks
+- Event APIs
+
+---
+
+# 29. Git e GitHub
+
+## Git
+
+- Git internals
+- Branching
+- Merge
+- Rebase
+- Cherry-pick
+- Bisect
+- Reflog
+- Hooks
+- Conflict resolution
+
+## GitHub
+
+- Pull Requests
+- Code review
+- Branch protection
+- CODEOWNERS
+- GitHub Actions
+- Releases
+- CI/CD
+
+---
+
+# 30. Comunicação e Liderança Técnica
+
+## Comunicação
+
+- Escrita técnica
+- Documentação
+- RFCs
+- ADRs
+- Architecture diagrams
+
+## Code Review
+
+- Bugs
+- Arquitetura
+- Segurança
+- Performance
+- Manutenibilidade
+
+## Liderança
+
+- Mentoring
+- Delegation
+- Technical decision making
+- Conflict resolution
+- Estimation
+- Prioritization
+
+## Senioridade
+
+Ser capaz de responder:
+
+> "Qual é a solução tecnicamente correta?"
+
+e também:
+
+> "Qual é a solução correta dadas as restrições do negócio?"
+
+---
+
+# 31. Conhecimento de Negócio
+
+- Custo
+- Receita
+- Usuários
+- Métricas
+- ROI
+- Risco
+- SLA
+- Compliance
+- Prioridades do negócio
+- Technical debt
+
+## Objetivo
+
+Entender que uma solução tecnicamente sofisticada nem sempre é a solução correta para o negócio.
+
+---
+
+# 32. Matemática e Estatística
+
+- Lógica
+- Álgebra
+- Probabilidade
+- Estatística
+- Média
+- Mediana
+- Variância
+- Distribuições
+- Percentis
+- Correlação
+- Regressão básica
+
+### Aplicações
+
+- Performance
+- Observabilidade
+- Capacity planning
+- Machine Learning
+- Análise de dados
+
+---
+
+# 33. Arquitetura de Computadores
+
+- CPU
+- RAM
+- Registers
+- CPU cache
+- L1/L2/L3
+- Memory hierarchy
+- Instruction execution
+- Storage
+- SSD/HDD
+- I/O
+- GPU
+
+## Objetivo
+
+Entender por que determinados programas são rápidos ou lentos.
+
+---
+
+# Biblioteca-base recomendada
+
+Se fosse necessário reduzir toda esta trilha a uma biblioteca central:
+
+## Fundamentos
+
+1. **Introduction to Algorithms — CLRS**
+2. **Operating Systems: Three Easy Pieces**
+3. **Computer Networking: A Top-Down Approach**
+
+## Backend e dados
+
+4. **Database Internals — Alex Petrov**
+5. **Designing Data-Intensive Applications — Martin Kleppmann & Chris Riccomini**
+
+## Engenharia
+
+6. **Refactoring — Martin Fowler**
+7. **Clean Architecture — Robert C. Martin**
+8. **Patterns of Enterprise Application Architecture — Martin Fowler**
+
+## Domínio
+
+9. **Domain-Driven Design — Eric Evans**
+10. **Implementing Domain-Driven Design — Vaughn Vernon**
+11. **Domain-Driven Design Distilled — Vaughn Vernon**
+
+## Segurança
+
+12. **Serious Cryptography — Jean-Philippe Aumasson**
+13. **Cryptography Engineering — Ferguson, Schneier & Kohno**
+14. **OWASP Top 10**
+15. **OWASP Web Security Testing Guide**
+16. **PortSwigger Web Security Academy**
+
+## SRE
+
+17. **Site Reliability Engineering — Google**
+18. **The Site Reliability Workbook — Google**
+19. **Building Secure & Reliable Systems — Google**
+
+## IA
+
+20. **Deep Learning — Goodfellow, Bengio & Courville**
+21. **Attention Is All You Need**
+22. **Stanford CS229**
+23. **The Illustrated Transformer**
+
+---
+
+# Fontes oficiais para tecnologias
+
+| Tecnologia | Fonte |
+|---|---|
+| TypeScript | https://www.typescriptlang.org/docs/ |
+| Node.js | https://nodejs.org/docs/ |
+| PostgreSQL | https://www.postgresql.org/docs/ |
+| MongoDB | https://www.mongodb.com/docs/ |
+| Redis | https://redis.io/docs/ |
+| Docker | https://docs.docker.com/ |
+| Kubernetes | https://kubernetes.io/docs/ |
+| AWS | https://docs.aws.amazon.com/ |
+| Terraform | https://developer.hashicorp.com/terraform/docs |
+| OpenTelemetry | https://opentelemetry.io/docs/ |
+| Prometheus | https://prometheus.io/docs/ |
+| Git | https://git-scm.com/doc |
+| GitHub | https://docs.github.com/ |
+| HTTP/Web | https://developer.mozilla.org/ |
+| RFCs | https://www.rfc-editor.org/ |
+| OWASP | https://owasp.org/ |
+| OpenAI | https://platform.openai.com/docs/ |
+
+---
+
+# Regra geral de estudo
+
+Para qualquer assunto novo:
+
+```text
+                    CONCEITO
+                       ↓
+                FUNDAMENTOS
+                       ↓
+                    TEORIA
+                       ↓
+                IMPLEMENTAÇÃO
+                       ↓
+                 EXPERIMENTAÇÃO
+                       ↓
+                  PROBLEMAS
+                       ↓
+                  DIAGNÓSTICO
+                       ↓
+                  TRADE-OFFS
+                       ↓
+               APLICAÇÃO REAL
+```
+
+O objetivo final não é:
+
+> "Eu estudei PostgreSQL."
+
+É:
+
+> "Eu entendo como PostgreSQL funciona, consigo modelar dados, escrever queries eficientes, analisar planos de execução, diagnosticar problemas de concorrência e decidir quando PostgreSQL é ou não a escolha adequada."
+
+---
+
+# Princípio final
+
+**Tecnologias mudam. Fundamentos permanecem.**
+
+Priorizar:
+
+1. Fundamentos de computação
+2. Redes
+3. Sistemas operacionais
+4. Banco de dados
+5. Engenharia de software
+6. Backend
+7. Sistemas distribuídos
+8. Segurança
+9. Infraestrutura
+10. Observabilidade
+11. System Design
+12. IA
+13. Negócio e liderança técnica
+
+E usar documentação oficial, livros, RFCs, padrões, papers e prática como fontes complementares — em vez de depender de um único curso ou criador de conteúdo.
