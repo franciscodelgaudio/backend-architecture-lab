@@ -10,70 +10,7 @@ A progressão sugerida existe, mas não é linear. Você pode entrar por onde a 
 
 ---
 
-## Parte 1 — Fundamentos que sempre importam
-
-### O modelo mental do Next (server, client e as fronteiras entre eles)
-
-Next.js não é "React com rotas". É um framework que decide, por você, onde cada pedaço de código roda: no build, no servidor a cada request, ou no navegador. Se você não internaliza essa decisão de fronteira, cada bug vira mistério. Se você internaliza, a maioria dos bugs fica óbvia antes de abrir o debugger.
-
-### As três perguntas que todo arquivo/componente responde:
-
-- Onde esse código executa? — build time, request time (servidor), ou runtime do navegador?
-- Quando ele executa? — uma vez por deploy, uma vez por request, ou toda vez que o usuário interage?
-- O que ele pode acessar? — segredos de ambiente e banco de dados (servidor) ou window, localStorage, eventos de clique (cliente)?
-
-Toda confusão clássica de Next — "por que minha env var é undefined", "por que esse hook não funciona aqui", "por que a página não atualiza" — é uma dessas três perguntas respondida errado.
-
-**React Server Components (RSC):** o divisor real
-**Server Components (default no App Router):** renderizam no servidor, não vão para o bundle do cliente, podem await direto num banco de dados, não têm estado nem useEffect.
-**Client Components ("use client"):** hidratam no navegador, viram JavaScript que o usuário baixa, têm estado, eventos, hooks.
-A árvore é mista por padrão: Server Components podem renderizar Client Components (passando props serializáveis), mas Client Components não podem importar Server Components diretamente — só recebê-los como children/slot.
-O que isso resolve: reduzir o JS enviado ao cliente e permitir acesso direto a dados no servidor sem uma camada de API intermediária.
-O que isso custa: um modelo mental novo de "fronteira serializável" — tudo que atravessa de Server para Client Component precisa ser serializável (sem funções, sem classes com métodos, sem Date sem cuidado).
-
-Exercício concreto: pegue uma página sua e desenhe, à mão, onde fica a fronteira "use client". Se você não consegue desenhar isso rápido, você não sabe o que está rodando onde.
-
-Renderização: os quatro modelos e o que cada um resolve
-SSR (Server-Side Rendering): HTML gerado a cada request no servidor. Resolve conteúdo que muda por usuário/sessão sem sacrificar SEO/first paint.
-SSG (Static Site Generation): HTML gerado no build, servido como arquivo estático. Resolve conteúdo que não muda entre requests — o mais rápido e barato possível.
-ISR (Incremental Static Regeneration): estático, mas com revalidação em background após um tempo (revalidate) ou sob demanda (revalidateTag/revalidatePath). Resolve o meio-termo: conteúdo que muda, mas não a cada request.
-Streaming SSR: o servidor manda o HTML em pedaços conforme fica pronto (via Suspense), em vez de esperar tudo. Resolve TTFB alto quando uma parte da página depende de dado lento.
-
-A pergunta certa não é "qual é melhor" — é "qual é o padrão de mudança dos dados desta página". Dado que nunca muda → SSG. Dado por usuário → SSR. Dado que muda, mas tolera atraso → ISR. Página com uma seção rápida e uma lenta → Streaming + Suspense.
-
-### Cache: a parte que mais gera bug em produção
-
-Next tem múltiplas camadas de cache simultâneas, cada uma com regra própria de invalidação. A maioria dos "bugs estranhos de produção que não reproduzem local" é uma dessas camadas fazendo exatamente o que foi projetada pra fazer, mas não o que você esperava.
-
-As camadas (entenda cada uma separadamente):
-
-Request memoization: dentro de um único request de servidor, chamadas fetch idênticas são deduplicadas automaticamente. Vive e morre com o request — não persiste entre requests diferentes.
-Data Cache: cache persistente de resultados de fetch no servidor, entre requests e até entre deploys, até ser invalidado ou expirar. Controlado por cache/next.revalidate na chamada de fetch.
-Full Route Cache: cache do HTML/RSC payload de rotas estáticas, gerado no build ou revalidado via ISR.
-Router Cache (client-side): cache no navegador de payloads de RSC já visitados, pra navegação instantânea entre páginas. Some quando a aba recarrega ou após tempo configurado.
-
-A dor que isso resolve: navegação instantânea e menos chamadas redundantes ao backend. O custo: você precisa saber exatamente qual camada invalidar quando um dado muda — invalidar a errada (ou nenhuma) é a causa raiz mais comum de "dado velho aparecendo pra usuário depois que ele salvou algo".
-
-Padrão prático: para cada Server Action ou mutação que você escreve, pergunte explicitamente "qual cache isso precisa invalidar, e com revalidatePath ou revalidateTag?". Se a resposta for "nenhum", verifique se está certo — normalmente não está.
-
-Referência principal: documentação oficial do Next sobre caching (nextjs.org/docs). Esta é uma área que muda de comportamento entre versões majors — trate como referência viva, não como conhecimento fixo que você aprende uma vez.
-
-### Runtime: Node vs. Edge, e Middleware
-Node runtime: ambiente completo, acesso a todas as APIs Node, cold start mais lento, roda nas regiões configuradas do seu provedor.
-Edge runtime: subconjunto de Web APIs (sem APIs nativas do Node), inicia quase instantaneamente, roda geograficamente perto do usuário.
-Trade-off real: Edge é ótimo pra lógica leve e latência-sensível (auth check, redirect, feature flag). Não serve pra tudo que precisa de bibliotecas Node completas (drivers de banco tradicionais, processamento pesado).
-Middleware roda antes da rota ser resolvida, sempre em Edge runtime, em toda request que casa com o matcher — inclusive assets, se você não filtrar bem. É bom pra redirecionamento e checagem leve de sessão; ruim pra lógica de negócio pesada ou acesso direto a banco relacional tradicional.
-Hidratação e o modelo de concorrência do lado cliente
-
-Hidratação é o processo de o React "religar" os event listeners no HTML que já veio do servidor. Erros de hidratação acontecem quando o HTML gerado no servidor difere do que o cliente renderiza na primeira passada — datas com timezone diferente, Math.random(), checagem malfeita de typeof window. Regra prática: nada não-determinístico pode influenciar a primeira renderização sem tratamento explícito (ex: aplicar só depois de montar no cliente).
-
-No servidor, o modelo de concorrência do Node é single-threaded com event loop: I/O é não-bloqueante, mas processamento pesado de CPU dentro de uma Server Action ou Route Handler bloqueia o loop inteiro e afeta todas as outras requisições sendo servidas ao mesmo tempo. Entender isso é o equivalente, no mundo Next, a entender threads e memória compartilhada em runtimes multi-thread — é o que evita que você trave o servidor sem perceber.
-
-Referências principais: documentação oficial em nextjs.org/docs e react.dev — tratem como fonte primária, dado o ritmo de mudança do framework. Learning React (Banks & Porcello) para fundamentos de React sem acoplar a versões específicas de API.
-
----
-
-## Parte 2 — Design de Código
+## Parte 1 — Design de Código
 
 ### Princípios Fundamentais
 
@@ -131,7 +68,7 @@ O ponto real: patterns são vocabulário. Quando você fala "isso é um Strategy
 
 ---
 
-## Parte 3 — Modelagem de Domínio
+## Parte 2 — Modelagem de Domínio
 
 ### Por que modelagem vem antes de arquitetura
 
@@ -189,7 +126,7 @@ Técnica de workshop para descobrir o domínio colaborativamente com especialist
 
 ---
 
-## Parte 4 — Arquitetura de Software
+## Parte 3 — Arquitetura de Software
 
 ### O que arquitetura é (e o que não é)
 
@@ -269,7 +206,7 @@ Custo: rastrear o fluxo de execução fica mais difícil; consistência eventual
 
 ---
 
-## Parte 5 — Sistemas Distribuídos
+## Parte 4 — Sistemas Distribuídos
 
 ### Por que importa para backend
 
@@ -320,7 +257,7 @@ Isola recursos por funcionalidade para que a falha de uma não esgote recursos d
 
 ---
 
-## Parte 6 — Qualidade e Testes
+## Parte 5 — Qualidade e Testes
 
 ### Testes como design
 
@@ -350,7 +287,7 @@ Verificam que um produtor (API) honra o contrato que seus consumidores esperam. 
 
 ---
 
-## Parte 7 — Estudar e Usar IA
+## Parte 6 — Estudar e Usar IA
 
 ### Entender como LLMs funcionam
 
