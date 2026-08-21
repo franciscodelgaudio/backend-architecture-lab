@@ -302,7 +302,7 @@ https://www.rfc-editor.org/
 
 ## 5.1 APIs
 
-- REST
+~~- REST~~
 - RPC
 - GraphQL
 - WebSockets
@@ -312,15 +312,15 @@ https://www.rfc-editor.org/
 ## 5.2 REST
 
 - Resources
-- HTTP semantics
-- Idempotency
-- Pagination
-- Filtering
-- Sorting
-- Versioning
+~~- HTTP semantics~~
+~~- Idempotency~~
+~~- Pagination~~
+~~- Filtering~~
+~~- Sorting~~
+~~- Versioning~~
 - Error handling
-- Rate limiting
-- Backward compatibility
+~~- Rate limiting~~
+~~- Backward compatibility~~
 - API documentation
 
 ## 5.3 Autenticação
@@ -1250,12 +1250,12 @@ em:
 
 - API contracts
 - OpenAPI
-- Versioning
-- Backward compatibility
-- Pagination
-- Idempotency
+~~- Versioning~~
+~~- Backward compatibility~~
+~~- Pagination~~
+~~- Idempotency~~
 - Error models
-- Rate limiting
+~~- Rate limiting~~
 - Authentication
 - Authorization
 - Webhooks
